@@ -40,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _loadMultiplierSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedMultipliers = prefs.getStringList('selectedMultipliers');
+    final savedMultipliers = prefs.getStringList('selected_multipliers');
     if (savedMultipliers != null) {
       setState(() {
         _selectedMultipliers = savedMultipliers.map(int.parse).toSet();
@@ -51,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _saveMultiplierSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
-      'selectedMultipliers',
+      'selected_multipliers',
       _selectedMultipliers.map((e) => e.toString()).toList(),
     );
   }
