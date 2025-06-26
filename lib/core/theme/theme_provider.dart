@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../colors/app_color_tokens.dart';
 import '../colors/app_colors_light.dart';
 import '../colors/app_colors_dark.dart';
@@ -138,9 +139,11 @@ class ThemeProvider extends ChangeNotifier {
     scaffoldBackgroundColor: const Color(0xFFF5F5F5),
     cardColor: const Color(0xFFFFFFFF),
     dividerColor: const Color(0xFFBDBDBD),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFF212121)),
-      bodyMedium: TextStyle(color: Color(0xFF757575)),
+    textTheme: GoogleFonts.mulishTextTheme(
+      const TextTheme(
+        bodyLarge: TextStyle(color: Color(0xFF212121)),
+        bodyMedium: TextStyle(color: Color(0xFF757575)),
+      ),
     ),
     iconTheme: const IconThemeData(color: Color(0xFF212121)),
   );
@@ -151,9 +154,11 @@ class ThemeProvider extends ChangeNotifier {
     scaffoldBackgroundColor: const Color(0xFF121212),
     cardColor: const Color(0xFF1E1E1E),
     dividerColor: const Color(0xFF505050),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFFE0E0E0)),
-      bodyMedium: TextStyle(color: Color(0xFFB0B0B0)),
+    textTheme: GoogleFonts.mulishTextTheme(
+      const TextTheme(
+        bodyLarge: TextStyle(color: Color(0xFFE0E0E0)),
+        bodyMedium: TextStyle(color: Color(0xFFB0B0B0)),
+      ),
     ),
     iconTheme: const IconThemeData(color: Color(0xFFE0E0E0)),
   );
