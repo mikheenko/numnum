@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,6 +170,20 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
     });
   }
 
+  // Helper method to play negative haptic feedback (3 short vibrations)
+  void _playNegativeHapticFeedback() async {
+    // First vibration - immediate, stronger for error indication
+    HapticFeedback.mediumImpact();
+    
+    // Second vibration - after short delay
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (mounted) HapticFeedback.lightImpact();
+    
+    // Third vibration - after another short delay
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (mounted) HapticFeedback.lightImpact();
+  }
+
   List<List<int>> _generateQuestions(int count) {
     final allCombinations = <List<int>>[];
     for (int i in _selectedMultipliers) {
@@ -224,6 +239,9 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
     _currentAttempts.add(_input);
     
     if (_input == answer.toString()) {
+      // Positive haptic feedback for correct answer
+      HapticFeedback.lightImpact();
+      
       setState(() {
         _correct++;
         _answered = true;
@@ -244,6 +262,9 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
   }
 
   void _showWrongAnswerFeedback() {
+    // Negative haptic feedback: three short vibrations for wrong answer
+    _playNegativeHapticFeedback();
+    
     setState(() {
       _lastWrongAnswer = _input;
       _showError = true;
