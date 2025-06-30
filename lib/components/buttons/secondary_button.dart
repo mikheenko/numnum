@@ -61,7 +61,6 @@ class SecondaryButton extends StatelessWidget {
                 text,
                 style: AppTextStyles.button.copyWith(
                   color: context.colors.textPrimary,
-                  fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
