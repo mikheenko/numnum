@@ -79,6 +79,10 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
   bool _player1ShowError = false;
   bool _player2ShowError = false;
 
+  // Track if players answered correctly for current question
+  bool _player1AnsweredCorrectly = false;
+  bool _player2AnsweredCorrectly = false;
+
 
   // Settings
   Set<int> _selectedMultipliers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -306,7 +310,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
     if (_gameEnded || !_gameStarted || _isPaused) return;
 
     if (player == 1) {
-      if (_player1Current >= AppConstants.totalQuestions) return;
+      if (_player1Current >= AppConstants.totalQuestions || _player1AnsweredCorrectly) return;
 
       setState(() {
         if (value == '<') {
@@ -336,7 +340,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
         }
       }
     } else {
-      if (_player2Current >= AppConstants.totalQuestions) return;
+      if (_player2Current >= AppConstants.totalQuestions || _player2AnsweredCorrectly) return;
 
       setState(() {
         if (value == '<') {
@@ -373,7 +377,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
       setState(() {
         _player1Correct++;
         _player1ShowError = false;
-
+        _player1AnsweredCorrectly = true;
       });
       _player1SuccessTrigger?.fire();
 
@@ -384,7 +388,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
       setState(() {
         _player2Correct++;
         _player2ShowError = false;
-
+        _player2AnsweredCorrectly = true;
       });
       _player2SuccessTrigger?.fire();
 
@@ -449,6 +453,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
         setState(() {
           _player1Current++;
           _player1Input = '';
+          _player1AnsweredCorrectly = false;
         });
       }
 
@@ -469,6 +474,7 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
         setState(() {
           _player2Current++;
           _player2Input = '';
+          _player2AnsweredCorrectly = false;
         });
       }
 
@@ -578,6 +584,8 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
       _player2Correct = 0;
       _player1Input = '';
       _player2Input = '';
+      _player1AnsweredCorrectly = false;
+      _player2AnsweredCorrectly = false;
       _gameEnded = false;
       _gameStarted = false;
       _winner = null;

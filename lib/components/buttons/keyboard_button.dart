@@ -26,13 +26,9 @@ class _KeyboardButtonState extends State<KeyboardButton> {
       child: ElevatedButton(
         onPressed: widget.enabled ? widget.onTap : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: widget.enabled 
-            ? context.colors.cardBackground
-            : context.colors.disabledColor,
-          foregroundColor: widget.enabled 
-            ? context.colors.textPrimary
-            : context.colors.textSecondary,
-          elevation: widget.enabled ? 2 : 0,
+          backgroundColor: context.colors.cardBackground,
+          foregroundColor: context.colors.textPrimary,
+          elevation: 2,
           shadowColor: context.colors.dividerColor.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: AppBorderRadius.medium,
@@ -44,9 +40,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
         ),
         child: DefaultTextStyle(
           style: AppTextStyles.keyboard.copyWith(
-            color: widget.enabled 
-              ? context.colors.textPrimary
-              : context.colors.textSecondary,
+            color: context.colors.textPrimary,
           ),
           child: widget.child ?? const SizedBox.shrink(),
         ),

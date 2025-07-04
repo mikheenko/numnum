@@ -19,22 +19,15 @@ class CustomKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: context.colors.cardBackground,
-        borderRadius: BorderRadius.circular(AppSpacing.md),
-        boxShadow: [
-          BoxShadow(
-            color: context.colors.dividerColor.withValues(alpha: 0.3),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
+        border: Border(
+          top: BorderSide(
+            color: context.colors.dividerColor,
+            width: 1.0,
           ),
-        ],
-        border: Border.all(
-          color: context.colors.dividerColor,
-          width: 1.0,
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xs),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -108,7 +101,7 @@ class CustomKeyboard extends StatelessWidget {
       onTap: onHintTap,
       enabled: onHintTap != null,
       child: const Icon(
-        Icons.lightbulb,
+        Icons.lightbulb_outline,
         size: 20,
       ),
     );

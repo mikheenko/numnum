@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../models/question_result.dart';
 import '../components/buttons/primary_button.dart';
-import '../components/common/responsive_wrapper.dart';
 
 import '../core/theme/theme_extensions.dart';
 import 'welcome_screen.dart';
@@ -64,11 +63,11 @@ class ResultScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.lightbulb,
-                      color: context.colors.warning,
-                      size: 20,
-                    ),
+                                      Icon(
+                    Icons.lightbulb_outline,
+                    color: context.colors.warning,
+                    size: 20,
+                  ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       'Подсказок использовано: $hintsUsed',
@@ -122,7 +121,7 @@ class ResultScreen extends StatelessWidget {
                         Row(
                           children: [
                             Icon(
-                              Icons.lightbulb,
+                              Icons.lightbulb_outline,
                               color: context.colors.warning,
                               size: 16,
                             ),
@@ -147,9 +146,7 @@ class ResultScreen extends StatelessWidget {
               text: 'Завершить тренировку',
               onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                  builder: (context) => const ResponsiveWrapper(
-                    child: WelcomeScreen(),
-                  ),
+                  builder: (context) => const WelcomeScreen(),
                 ),
                 (route) => false,
               ),

@@ -321,12 +321,10 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
       _saveStats();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ResponsiveWrapper(
-            child: ResultScreen(
-              correct: _correct,
-              total: AppConstants.totalQuestions,
-              results: _results,
-            ),
+          builder: (context) => ResultScreen(
+            correct: _correct,
+            total: AppConstants.totalQuestions,
+            results: _results,
           ),
         ),
       );
@@ -362,8 +360,6 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
   }
 
   void _showHint() {
-    if (_answered) return;
-    
     final currentQuestion = _questions[_current];
     final hint = HintSystem.getHint(currentQuestion[0], currentQuestion[1]);
     
@@ -453,126 +449,125 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
         return Scaffold(
           backgroundColor: context.colors.screenBackground,
           body: SafeArea(
-            child: ResponsiveWrapper(
-              child: Column(
-                children: [
-                  // Верхняя панель с прогрессом
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      0, 0, 0, 0,
-                    ),
-                    child: Row(
+            child: Column(
+              children: [
+                // Основной контент с отступами (верхняя панель, уравнения, персонаж)
+                Expanded(
+                  child: ResponsiveWrapper(
+                    child: Column(
                       children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: context.colors.textPrimary,
+                        // Верхняя панель с прогрессом
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            0, 0, 0, 0,
                           ),
-                          onPressed: _exitLesson,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 0, 
-                              right: 0,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: AppBorderRadius.small,
-                              child: TweenAnimationBuilder<double>(
-                                tween: Tween<double>(
-                                  begin: 0, 
-                                  end: _current / AppConstants.totalQuestions,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  color: context.colors.textPrimary,
                                 ),
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.easeIn,
-                                builder: (context, value, child) => LinearProgressIndicator(
-                                  value: value,
-                                  minHeight: 8,
-                                  backgroundColor: context.colors.tabContainerBackground,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    context.colors.primary,
-                                  ),
-                                ),
+                                onPressed: _exitLesson,
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Основной контент
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  if (_isAnimating && _prevQuestion != null)
-                                    SlideTransition(
-                                      position: _oldOffsetAnim,
-                                      child: _buildEquationRow(
-                                        _prevQuestion!, 
-                                        true, 
-                                        '', 
-                                        _prevQuestion![0] * _prevQuestion![1], 
-                                        true, 
-                                        false,
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 0, 
+                                    right: 0,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: AppBorderRadius.small,
+                                    child: TweenAnimationBuilder<double>(
+                                      tween: Tween<double>(
+                                        begin: 0, 
+                                        end: _current / AppConstants.totalQuestions,
+                                      ),
+                                      duration: const Duration(milliseconds: 250),
+                                      curve: Curves.easeIn,
+                                      builder: (context, value, child) => LinearProgressIndicator(
+                                        value: value,
+                                        minHeight: 8,
+                                        backgroundColor: context.colors.tabContainerBackground,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          context.colors.primary,
+                                        ),
                                       ),
                                     ),
-                                  SlideTransition(
-                                    position: _isAnimating && _prevQuestion != null 
-                                        ? _newOffsetAnim 
-                                        : const AlwaysStoppedAnimation(Offset.zero),
-                                    child: AnimatedBuilder(
-                                      animation: _shakeAnimation,
-                                      builder: (context, child) {
-                                        return Transform.translate(
-                                          offset: _showError ? _shakeAnimation.value * 20 : Offset.zero,
-                                          child: _buildEquationRow(
-                                            _questions[_current], 
-                                            _answered, 
-                                            _input, 
-                                            _questions[_current][0] * _questions[_current][1], 
-                                            false, 
-                                            _showError,
-                                          ),
-                                        );
-                                      },
-                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: SizedBox(
-                                width: 160,
-                                height: double.infinity,
-                                child: RiveAnimation.asset(
-                                  'assets/gemmy.riv',
-                                  artboard: 'Character',
-                                  controllers: [_idleController, _blinkController],
-                                  onInit: _onRiveInit,
-                                  fit: BoxFit.contain,
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
+                        // Основной контент
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        if (_isAnimating && _prevQuestion != null)
+                                          SlideTransition(
+                                            position: _oldOffsetAnim,
+                                            child: _buildEquationRow(
+                                              _prevQuestion!, 
+                                              true, 
+                                              '', 
+                                              _prevQuestion![0] * _prevQuestion![1], 
+                                              true, 
+                                              false,
+                                            ),
+                                          ),
+                                        SlideTransition(
+                                          position: _isAnimating && _prevQuestion != null 
+                                              ? _newOffsetAnim 
+                                              : const AlwaysStoppedAnimation(Offset.zero),
+                                          child: AnimatedBuilder(
+                                            animation: _shakeAnimation,
+                                            builder: (context, child) {
+                                              return Transform.translate(
+                                                offset: _showError ? _shakeAnimation.value * 20 : Offset.zero,
+                                                child: _buildEquationRow(
+                                                  _questions[_current], 
+                                                  _answered, 
+                                                  _input, 
+                                                  _questions[_current][0] * _questions[_current][1], 
+                                                  false, 
+                                                  _showError,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 160,
+                                      height: double.infinity,
+                                      child: RiveAnimation.asset(
+                                        'assets/gemmy.riv',
+                                        artboard: 'Character',
+                                        controllers: [_idleController, _blinkController],
+                                        onInit: _onRiveInit,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                                    // Нижняя панель
-                  SafeArea(
-                    top: false,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                        ),
+                        // Область для отображения ошибок/правильных ответов
                         SizedBox(
                           height: AppButtonDimensions.heightLarge + AppSpacing.lg,
                           child: Center(
@@ -607,22 +602,31 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
                                       ),
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.sm),
-                        AnimatedSwitcher(
+                      ],
+                    ),
+                  ),
+                ),
+                // Клавиатура без отступов (вплотную к краям)
+                SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: AppSpacing.sm),
+                                              AnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           child: CustomKeyboard(
                             key: const ValueKey('keyboard'),
                             onTap: _onKeyboardTap,
-                            enabled: !_answered,
-                            onHintTap: !_answered ? _showHint : null,
+                            enabled: true,
+                            onHintTap: _showHint,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.sm),
-                      ],
-                    ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

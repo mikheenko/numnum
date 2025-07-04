@@ -50,12 +50,7 @@ class PythagorasTableScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.md, 0, AppSpacing.md, AppSpacing.md,
-                    ),
-                    child: _PythagorasTableWithModes(),
-                  ),
+                  child: _PythagorasTableWithModes(),
                 ),
               ],
             ),
@@ -213,6 +208,7 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
 
   void _onPracticeKeyboardTap(String value) {
     if (_selectedI == null || _selectedJ == null) return;
+    if (_solvedCells.contains('${_selectedI}_$_selectedJ')) return;
     
     setState(() {
       if (value == '<') {
@@ -341,111 +337,137 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
   @override
   Widget build(BuildContext context) {
     if (_currentMode == TableMode.study) {
-      return Column(
-        children: [
-          const SizedBox(height: AppSpacing.md),
-          _buildSegmentControl(),
-          const SizedBox(height: AppSpacing.md),
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final cellHeight = constraints.maxHeight / 11;
-                      return _PythagorasStudyTable(
-                        cellHeight: cellHeight,
-                        selectedI: _selectedI,
-                        selectedJ: _selectedJ,
-                        solvedCells: _solvedCells,
-                        onCellTap: _onCellTap,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                // Math facts area with hint button
-                SizedBox(
-                  height: 220,
-                  child: Column(
-                    children: [
-                      Expanded(child: _MathFactsArea()),
-                      // Show hint button only if cell is selected
-                      if (_selectedI != null && _selectedJ != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: AppSpacing.sm),
-                          child: ElevatedButton(
-                            onPressed: _showHint,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: context.colors.primary,
-                              foregroundColor: context.colors.onPrimary,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.lg,
-                                vertical: AppSpacing.sm,
-                              ),
-                            ),
-                            child: Text(
-                              AppLocalizations.get('hint_button', context),
-                              style: AppTextStyles.body2.copyWith(
-                                color: context.colors.onPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    } else {
-      return SafeArea(
-        bottom: false,
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.md, 0, AppSpacing.md, AppSpacing.md,
+        ),
         child: Column(
           children: [
             const SizedBox(height: AppSpacing.md),
             _buildSegmentControl(),
             const SizedBox(height: AppSpacing.md),
             Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final cellHeight = constraints.maxHeight / 11;
-                  return Stack(
-                    children: [
-                      _PythagorasPracticeTable(
-                        cellHeight: cellHeight,
-                        solvedCells: _solvedCells,
-                        selectedI: _selectedI,
-                        selectedJ: _selectedJ,
-                        currentInput: _practiceInput,
-                        shakeAnimation: _shakeAnimation,
-                        onReset: _showResetConfirmation,
-                        onCellTap: _onCellTap,
-                      ),
-                      // Show tooltip for empty table when 5x5 is selected
-                      if (_solvedCells.isEmpty && _selectedI == 5 && _selectedJ == 5)
-                        _buildTooltip(cellHeight),
-                    ],
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, AppSpacing.xl, 0, 0),
-              child: SizedBox(
-                child: CustomKeyboard(
-                  onTap: _onPracticeKeyboardTap,
-                  enabled: _selectedI != null && 
-                           _selectedJ != null && 
-                           !_solvedCells.contains('${_selectedI}_$_selectedJ'),
-                  onHintTap: (_selectedI != null && _selectedJ != null) ? _showHint : null,
-                ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final cellHeight = constraints.maxHeight / 11;
+                        return _PythagorasStudyTable(
+                          cellHeight: cellHeight,
+                          selectedI: _selectedI,
+                          selectedJ: _selectedJ,
+                          solvedCells: _solvedCells,
+                          onCellTap: _onCellTap,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  // Math facts area with hint button - fixed height to match keyboard
+                  SizedBox(
+                    height: (AppButtonDimensions.keyboardButton * 4) + 
+                            (AppSpacing.sm * 3) + 
+                            (AppSpacing.md * 2) + 
+                            1, // Exact keyboard height: 217px
+                    child: Column(
+                      children: [
+                        Expanded(child: _MathFactsArea()),
+                        // Show hint button only if cell is selected
+                        if (_selectedI != null && _selectedJ != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: AppSpacing.sm),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: AppButtonDimensions.keyboardButton,
+                              child: ElevatedButton(
+                                onPressed: _showHint,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: context.colors.cardBackground,
+                                  foregroundColor: context.colors.textPrimary,
+                                  elevation: 2,
+                                  shadowColor: context.colors.dividerColor.withValues(alpha: 0.4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: AppBorderRadius.medium,
+                                  ),
+                                  side: BorderSide(
+                                    color: context.colors.dividerColor,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.lightbulb_outline,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
+      );
+    } else {
+      return Column(
+        children: [
+          // Основной контент с отступами
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md, 0, AppSpacing.md, 0,
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: AppSpacing.md),
+                    _buildSegmentControl(),
+                    const SizedBox(height: AppSpacing.md),
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final cellHeight = constraints.maxHeight / 11;
+                          return Stack(
+                            children: [
+                              _PythagorasPracticeTable(
+                                cellHeight: cellHeight,
+                                solvedCells: _solvedCells,
+                                selectedI: _selectedI,
+                                selectedJ: _selectedJ,
+                                currentInput: _practiceInput,
+                                shakeAnimation: _shakeAnimation,
+                                onReset: _showResetConfirmation,
+                                onCellTap: _onCellTap,
+                              ),
+                              // Show tooltip for empty table when 5x5 is selected
+                              if (_solvedCells.isEmpty && _selectedI == 5 && _selectedJ == 5)
+                                _buildTooltip(cellHeight),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    // Дополнительное пространство перед клавиатурой
+                    const SizedBox(height: AppSpacing.xxl),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Клавиатура без отступов от краев
+          SafeArea(
+            top: false,
+            child: CustomKeyboard(
+              onTap: _onPracticeKeyboardTap,
+              enabled: true,
+              onHintTap: _showHint,
+            ),
+          ),
+        ],
       );
     }
   }
@@ -545,18 +567,12 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(Icons.lightbulb_outline, color: Colors.amber[700], size: 20),
-                const SizedBox(width: AppSpacing.sm),
-                Text(
-                  AppLocalizations.get('interesting_facts'),
-                  style: AppTextStyles.body2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: context.colors.textSecondary,
-                  ),
-                ),
-              ],
+            Text(
+              AppLocalizations.get('interesting_facts'),
+              style: AppTextStyles.body2.copyWith(
+                fontWeight: FontWeight.bold,
+                color: context.colors.textSecondary,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             Expanded(

@@ -68,7 +68,7 @@ class _HintPopupState extends State<HintPopup>
     return GestureDetector(
       onTap: _closePopup,
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withOpacity(0.4),
         child: Stack(
           children: [
             // Background tap to close
@@ -89,16 +89,16 @@ class _HintPopupState extends State<HintPopup>
                   child: Container(
                     margin: const EdgeInsets.all(AppSpacing.md),
                     constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                      maxHeight: MediaQuery.of(context).size.height * 0.85,
                     ),
                     decoration: BoxDecoration(
                       color: context.colors.surface,
                       borderRadius: AppBorderRadius.large,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: const Offset(0, -2),
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, -1),
                         ),
                       ],
                     ),
@@ -106,22 +106,17 @@ class _HintPopupState extends State<HintPopup>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         // Header with close button
-                        Container(
-                          padding: const EdgeInsets.all(AppSpacing.md),
-                                                     decoration: BoxDecoration(
-                             color: context.colors.primary.withOpacity(0.1),
-                             borderRadius: const BorderRadius.only(
-                               topLeft: Radius.circular(AppBorderRadius.lg),
-                               topRight: Radius.circular(AppBorderRadius.lg),
-                             ),
-                           ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg, AppSpacing.lg, AppSpacing.md, AppSpacing.md,
+                          ),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   widget.hint.title[widget.currentLanguage] ?? 
                                   widget.hint.title['ru']!,
-                                  style: AppTextStyles.h3.copyWith(
+                                  style: AppTextStyles.body2.copyWith(
                                     color: context.colors.onSurface,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.none,
@@ -133,10 +128,10 @@ class _HintPopupState extends State<HintPopup>
                                 icon: Icon(
                                   Icons.close,
                                   color: context.colors.onSurface,
+                                  size: 24,
                                 ),
                                 style: IconButton.styleFrom(
-                                  backgroundColor: context.colors.surface.withOpacity(0.8),
-                                  minimumSize: const Size(32, 32),
+                                  minimumSize: const Size(40, 40),
                                   padding: EdgeInsets.zero,
                                 ),
                               ),
@@ -144,67 +139,58 @@ class _HintPopupState extends State<HintPopup>
                           ),
                         ),
                         
+                        // Divider
+                        Container(
+                          height: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                          decoration: BoxDecoration(
+                            color: context.colors.dividerColor,
+                          ),
+                        ),
+                        
                         // Content
                         Flexible(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.all(AppSpacing.md),
+                            padding: const EdgeInsets.all(AppSpacing.lg),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Description
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(AppSpacing.md),
-                                  decoration: BoxDecoration(
-                                    color: context.colors.secondary.withOpacity(0.1),
-                                    borderRadius: AppBorderRadius.medium,
-                                    border: Border.all(
-                                      color: context.colors.secondary.withOpacity(0.3),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    widget.hint.description[widget.currentLanguage] ?? 
-                                    widget.hint.description['ru']!,
-                                    style: AppTextStyles.body2.copyWith(
-                                      color: context.colors.onSurface,
-                                      height: 1.4,
-                                      decoration: TextDecoration.none,
-                                    ),
-                                    textAlign: TextAlign.left,
+                                Text(
+                                  widget.hint.description[widget.currentLanguage] ?? 
+                                  widget.hint.description['ru']!,
+                                  style: AppTextStyles.body2.copyWith(
+                                    color: context.colors.onSurface,
+                                    height: 1.5,
+                                    decoration: TextDecoration.none,
                                   ),
                                 ),
                                 
                                 const SizedBox(height: AppSpacing.lg),
                                 
                                 // Technique section
-                                _buildSection(
+                                _buildMinimalSection(
                                   title: widget.currentLanguage == 'ru' 
-                                      ? 'Техники запоминания 🎯'
+                                      ? 'Техники запоминания'
                                       : widget.currentLanguage == 'en'
-                                          ? 'Memory Techniques 🎯'
-                                          : 'Merktechniken 🎯',
+                                          ? 'Memory Techniques'
+                                          : 'Merktechniken',
                                   content: widget.hint.technique[widget.currentLanguage] ?? 
                                            widget.hint.technique['ru']!,
-                                  backgroundColor: context.colors.warning.withOpacity(0.1),
-                                  borderColor: context.colors.warning.withOpacity(0.3),
                                 ),
                                 
                                 const SizedBox(height: AppSpacing.lg),
                                 
                                 // Visualization section
-                                _buildSection(
+                                _buildMinimalSection(
                                   title: widget.currentLanguage == 'ru' 
-                                      ? 'Визуализация 🎨'
+                                      ? 'Визуализация'
                                       : widget.currentLanguage == 'en'
-                                          ? 'Visualization 🎨'
-                                          : 'Visualisierung 🎨',
+                                          ? 'Visualization'
+                                          : 'Visualisierung',
                                   content: widget.hint.visualization[widget.currentLanguage] ?? 
                                            widget.hint.visualization['ru']!,
-                                  backgroundColor: context.colors.tertiary,
-                                  borderColor: context.colors.primary.withOpacity(0.3),
                                 ),
-                                
-
                               ],
                             ),
                           ),
@@ -221,42 +207,92 @@ class _HintPopupState extends State<HintPopup>
     );
   }
 
-  Widget _buildSection({
+  Widget _buildMinimalSection({
     required String title,
     required String content,
-    required Color backgroundColor,
-    required Color borderColor,
   }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: AppBorderRadius.medium,
-        border: Border.all(color: borderColor),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: AppTextStyles.body2.copyWith(
-              color: context.colors.onSurface,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.none,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTextStyles.body2.copyWith(
+            color: context.colors.onSurface,
+            fontWeight: FontWeight.bold,
+            decoration: TextDecoration.none,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ..._buildContentWidgets(content),
+      ],
+    );
+  }
+
+  List<Widget> _buildContentWidgets(String content) {
+    final lines = content.split('\n');
+    final widgets = <Widget>[];
+    
+    for (final line in lines) {
+      if (line.trim().isEmpty) continue;
+      
+      // Check if this is a list item (starts with • or similar)
+      if (line.trim().startsWith('•') || line.trim().startsWith('◆') || line.trim().startsWith('🔹')) {
+        final itemText = line.trim().startsWith('🔹') 
+            ? line.trim().substring(2).trim() // emoji takes 2 characters
+            : line.trim().substring(1).trim();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(
+              left: AppSpacing.xs,
+              bottom: AppSpacing.sm,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: AppTextStyles.body2.fontSize! * 0.7), // Центрируем по первой строке
+                  child: Container(
+                    width: 4.0,
+                    height: 4.0,
+                    decoration: BoxDecoration(
+                      color: context.colors.onSurface,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    itemText,
+                    style: AppTextStyles.body2.copyWith(
+                      color: context.colors.onSurface,
+                      height: 1.5,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-                      Text(
-              content,
+        );
+      } else {
+        // Regular text
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+            child: Text(
+              line,
               style: AppTextStyles.body2.copyWith(
                 color: context.colors.onSurface,
-                height: 1.4,
+                height: 1.5,
                 decoration: TextDecoration.none,
               ),
             ),
-        ],
-      ),
-    );
+          ),
+        );
+      }
+    }
+    
+    return widgets;
   }
 } 
