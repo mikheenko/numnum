@@ -30,10 +30,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         final themeProvider = context.read<ThemeProvider>();
         final languageManager = context.read<LanguageManager>();
         
-        setState(() {
-          _selectedLanguage = languageManager.currentLanguage;
-          _selectedTheme = themeProvider.themeString;
-        });
+        if (mounted) {
+          setState(() {
+            _selectedLanguage = languageManager.currentLanguage;
+            _selectedTheme = themeProvider.themeString;
+          });
+        }
       }
     });
   }

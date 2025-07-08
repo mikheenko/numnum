@@ -285,26 +285,32 @@ class HintSystem {
     // Try pattern match for any number with specific multiplier
     key = '${a}_x';
     if (_hints.containsKey(key)) {
-      return MultiplicationHint(
-        a: a,
-        b: b,
-        title: _hints[key]!.title,
-        description: _hints[key]!.description,
-        technique: _hints[key]!.technique,
-        visualization: _hints[key]!.visualization,
-      );
+      final hint = _hints[key];
+      if (hint != null) {
+        return MultiplicationHint(
+          a: a,
+          b: b,
+          title: hint.title,
+          description: hint.description,
+          technique: hint.technique,
+          visualization: hint.visualization,
+        );
+      }
     }
     
     key = '${b}_x';
     if (_hints.containsKey(key)) {
-      return MultiplicationHint(
-        a: b,
-        b: a,
-        title: _hints[key]!.title,
-        description: _hints[key]!.description,
-        technique: _hints[key]!.technique,
-        visualization: _hints[key]!.visualization,
-      );
+      final hint = _hints[key];
+      if (hint != null) {
+        return MultiplicationHint(
+          a: b,
+          b: a,
+          title: hint.title,
+          description: hint.description,
+          technique: hint.technique,
+          visualization: hint.visualization,
+        );
+      }
     }
     
     return null;
