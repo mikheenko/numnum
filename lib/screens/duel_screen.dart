@@ -497,8 +497,10 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
             (_player1Current >= AppConstants.totalQuestions &&
                 _player2Current >= AppConstants.totalQuestions)) &&
         !_gameEnded) {
+      // Prevent race condition by setting game ended immediately
+      _gameEnded = true;
+      
       setState(() {
-        _gameEnded = true;
         if (_player1Correct > _player2Correct) {
           _winner = 1;
         } else if (_player2Correct > _player1Correct) {
