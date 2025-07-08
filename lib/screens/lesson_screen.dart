@@ -386,6 +386,13 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
   }
 
   void _exitLesson() {
+    // Если не было решено ни одного примера, выходим без подтверждения
+    if (_correct == 0) {
+      Navigator.of(context).pop();
+      return;
+    }
+    
+    // Если есть решенные примеры, показываем диалог подтверждения
     showDialog(
       context: context,
       builder: (context) => Center(
