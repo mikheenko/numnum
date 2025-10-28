@@ -352,7 +352,9 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final cellHeight = constraints.maxHeight / 11;
+                        final rowHeight = constraints.maxHeight / 11;
+                        // Subtract vertical margins (1px top + 1px bottom)
+                        final cellHeight = (rowHeight - 2).clamp(0.0, double.infinity).toDouble();
                         return _PythagorasStudyTable(
                           cellHeight: cellHeight,
                           selectedI: _selectedI,
@@ -363,7 +365,7 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
                       },
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xl),
+                  const SizedBox(height: AppSpacing.sm),
                   // Math facts area with hint button - fixed height to match keyboard
                   SizedBox(
                     height: (AppButtonDimensions.keyboardButton * 4) + 
@@ -419,8 +421,8 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.md, 0, AppSpacing.md, 0,
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.md, 0, AppSpacing.md, MediaQuery.of(context).padding.bottom,
                 ),
                 child: Column(
                   children: [
@@ -430,7 +432,9 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
                     Expanded(
                       child: LayoutBuilder(
                         builder: (context, constraints) {
-                          final cellHeight = constraints.maxHeight / 11;
+                          final rowHeight = constraints.maxHeight / 11;
+                          // Subtract vertical margins (1px top + 1px bottom)
+                          final cellHeight = (rowHeight - 2).clamp(0.0, double.infinity).toDouble();
                           return Stack(
                             children: [
                               _PythagorasPracticeTable(
@@ -452,7 +456,7 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
                       ),
                     ),
                     // Дополнительное пространство перед клавиатурой
-                    const SizedBox(height: AppSpacing.xxl),
+                    const SizedBox(height: AppSpacing.lg),
                   ],
                 ),
               ),
@@ -668,23 +672,26 @@ class _PythagorasStudyTable extends StatelessWidget {
           children: [
             const SizedBox(),
             for (int j = 1; j <= size; j++)
-              Container(
-                margin: const EdgeInsets.all(1),
-                height: cellHeight,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: selectedJ == j ? context.colors.warning : context.colors.cardBackground,
-                  borderRadius: AppBorderRadius.extraSmall,
-                ),
-                child: Text(
-                  j.toString(),
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: selectedJ == j ? context.colors.cardBackground : context.colors.warning,
-                    height: 1.0,
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: cellHeight + 2),
+                child: Container(
+                  margin: const EdgeInsets.all(1),
+                  height: cellHeight,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: selectedJ == j ? context.colors.warning : context.colors.cardBackground,
+                    borderRadius: AppBorderRadius.extraSmall,
                   ),
-                  textAlign: TextAlign.center,
+                  child: Text(
+                    j.toString(),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: selectedJ == j ? context.colors.cardBackground : context.colors.warning,
+                      height: 1.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
           ],
@@ -692,7 +699,9 @@ class _PythagorasStudyTable extends StatelessWidget {
         for (int i = 1; i <= size; i++)
           TableRow(
             children: [
-              Container(
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: cellHeight + 2),
+                child: Container(
                 margin: const EdgeInsets.all(1),
                 height: cellHeight,
                 alignment: Alignment.center,
@@ -711,8 +720,10 @@ class _PythagorasStudyTable extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              ),
               for (int j = 1; j <= size; j++)
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () => onCellTap(i, j),
                   child: Stack(
                     children: [
@@ -779,7 +790,8 @@ class _PythagorasPracticeTable extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            GestureDetector(
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
               onTap: onReset,
               child: Container(
                 margin: const EdgeInsets.all(1),
@@ -854,6 +866,7 @@ class _PythagorasPracticeTable extends StatelessWidget {
     final isCurrent = selectedI == i && selectedJ == j;
 
     Widget cell = GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => onCellTap(i, j),
       child: Stack(
         children: [
