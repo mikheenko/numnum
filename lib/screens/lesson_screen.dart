@@ -351,6 +351,38 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
       await prefs.setInt('solved_$today', newSolved);
       await prefs.setInt('mistakes_$today', newMistakes);
       
+      // Parent-facing training metrics
+      final lastDate = prefs.getString('last_training_date');
+      final trainingsToday = prefs.getInt('trainings_$today') ?? 0;
+      int daysStreak = prefs.getInt('days_streak') ?? 0;
+      int trainingsTotal = prefs.getInt('trainings_total') ?? 0;
+      
+      final now = DateTime.now();
+      final yesterday = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 1));
+      final yesterdayStr = DateFormat('yyyy-MM-dd').format(yesterday);
+      
+      // Update streak based on the last training date
+      if (lastDate == today) {
+        // Same day: streak unchanged
+        await prefs.setInt('trainings_$today', trainingsToday + 1);
+      } else if (lastDate == yesterdayStr) {
+        // Consecutive day: increase streak and reset today's counter to 1
+        daysStreak = daysStreak + 1;
+        await prefs.setInt('days_streak', daysStreak);
+        await prefs.setInt('trainings_$today', 1);
+        await prefs.setString('last_training_date', today);
+      } else {
+        // New streak starting today
+        daysStreak = 1;
+        await prefs.setInt('days_streak', daysStreak);
+        await prefs.setInt('trainings_$today', 1);
+        await prefs.setString('last_training_date', today);
+      }
+      
+      // Always increase total trainings count
+      trainingsTotal = trainingsTotal + 1;
+      await prefs.setInt('trainings_total', trainingsTotal);
+      
       // Save hints usage statistics
       final totalHints = prefs.getInt('total_hints_used') ?? 0;
       await prefs.setInt('total_hints_used', totalHints + _totalHintsUsed);

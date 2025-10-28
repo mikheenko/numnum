@@ -134,6 +134,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           AppLocalizations.get('multiplication_tables'),
           style: AppTextStyles.h3.copyWith(color: context.colors.onSurface),
         ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          AppLocalizations.get('multiplication_tables_description'),
+          style: AppTextStyles.body2.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
         const SizedBox(height: AppSpacing.lg),
         LayoutBuilder(
           builder: (context, constraints) {

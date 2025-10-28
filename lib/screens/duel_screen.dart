@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 
 import '../utils/constants.dart';
 import '../core/theme/theme_provider.dart';
@@ -214,17 +213,23 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
   }
 
   List<List<int>> _generateQuestions(int count) {
-    final random = Random();
-    final questions = <List<int>>[];
-    final multipliersList = _selectedMultipliers.toList();
-    
-    for (int i = 0; i < count; i++) {
-      final factor1 = multipliersList[random.nextInt(multipliersList.length)];
-      final factor2 = random.nextInt(10) + 1;
-      questions.add([factor1, factor2]);
+    // Build all possible combinations for selected multipliers (a × b, b in 1..10)
+    final allCombinations = <List<int>>[];
+    for (int a in _selectedMultipliers) {
+      for (int b = 1; b <= 10; b++) {
+        allCombinations.add([a, b]);
+      }
     }
     
-    return questions;
+    if (allCombinations.isEmpty) {
+      // Fallback to ensure at least some questions exist
+      return List.generate(count, (index) => [1, (index % 10) + 1]);
+    }
+    
+    // Shuffle to randomize order, then take the first N unique entries
+    allCombinations.shuffle();
+    final take = count.clamp(0, allCombinations.length);
+    return allCombinations.take(take).toList();
   }
 
   Future<void> _showStartDialogIfNeeded() async {

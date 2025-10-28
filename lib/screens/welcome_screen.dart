@@ -26,11 +26,10 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   Set<int> _selectedMultipliers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-  // Статистика
-  int _solvedToday = 0;
-  int _totalSolved = 0;
-  int _streak = 0;
-  double _accuracy = 0.0;
+  // Parent-facing metrics
+  int _daysStreak = 0; // Consecutive training days
+  int _trainingsToday = 0; // Trainings done today
+  int _trainingsTotal = 0; // Total trainings
 
   @override
   void initState() {
@@ -44,20 +43,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       final prefs = await SharedPreferences.getInstance();
       final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
       setState(() {
-        _solvedToday = prefs.getInt('solved_$today') ?? 0;
-
-        _totalSolved = prefs.getInt('total_solved') ?? 0;
-        _streak = prefs.getInt('streak') ?? 0;
-        _accuracy = prefs.getDouble('accuracy') ?? 0.0;
+        _daysStreak = prefs.getInt('days_streak') ?? 0;
+        _trainingsToday = prefs.getInt('trainings_$today') ?? 0;
+        _trainingsTotal = prefs.getInt('trainings_total') ?? 0;
       });
     } catch (e) {
       print('Error loading stats: $e');
       setState(() {
-        _solvedToday = 0;
-
-        _totalSolved = 0;
-        _streak = 0;
-        _accuracy = 0.0;
+        _daysStreak = 0;
+        _trainingsToday = 0;
+        _trainingsTotal = 0;
       });
     }
   }
@@ -154,35 +149,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           const SizedBox(height: AppSpacing.lg),
                           
-                          // Статистические карточки
+                          // Parent-facing stats: two on top, one full width below
                           Row(
                             children: [
                               Expanded(
                                 child: StatsCard(
-                                  title: AppLocalizations.get('solved_today'),
-                                  value: _solvedToday.toString(),
-                                  icon: Icons.check_circle,
-                                  iconColor: context.colors.success,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Expanded(
-                                child: StatsCard(
-                                  title: AppLocalizations.get('accuracy'),
-                                  value: '${_accuracy.toStringAsFixed(0)}%',
-                                  icon: Icons.track_changes,
-                                  iconColor: context.colors.primary,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: StatsCard(
-                                  title: AppLocalizations.get('win_streak'),
-                                  value: _streak.toString(),
+                                  title: AppLocalizations.get('parent_days_streak'),
+                                  value: _daysStreak.toString(),
                                   icon: Icons.local_fire_department,
                                   iconColor: context.colors.warning,
                                 ),
@@ -190,13 +163,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: StatsCard(
-                                  title: AppLocalizations.get('total_solved'),
-                                  value: _totalSolved.toString(),
-                                  icon: Icons.emoji_events,
-                                  iconColor: context.colors.secondary,
+                                  title: AppLocalizations.get('parent_trainings_today'),
+                                  value: _trainingsToday.toString(),
+                                  icon: Icons.today,
+                                  iconColor: context.colors.primary,
                                 ),
                               ),
                             ],
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          SizedBox(
+                            width: double.infinity,
+                            child: StatsCard(
+                              title: AppLocalizations.get('parent_trainings_total'),
+                              value: _trainingsTotal.toString(),
+                              icon: Icons.emoji_events,
+                              iconColor: context.colors.secondary,
+                            ),
                           ),
                           const SizedBox(height: AppSpacing.lg),
                         ],

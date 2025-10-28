@@ -17,6 +17,7 @@ class AppLocalizations {
       'total_solved': 'Всего решено',
       'multiplication_table': 'Таблица умножения',
       'multiplication_tables': 'Таблица умножения',
+      'multiplication_tables_description': 'Выберите числа, которые хотите тренировать',
       'language': 'Язык',
       'theme': 'Тема',
       'select_numbers': 'Выберите, какие числа будут использоваться в тренировках и дуэлях. Должно быть выбрано минимум одно число.',
@@ -70,6 +71,10 @@ class AppLocalizations {
       'pause_message': 'Дуэль приостановлена',
       'resume': 'Продолжить',
       'exit_duel': 'Выйти из дуэли',
+      // Parent metrics
+      'parent_days_streak': 'Дней подряд',
+      'parent_trainings_today': 'Тренировок сегодня',
+      'parent_trainings_total': 'Всего тренировок',
     },
     'en': {
       'app_title': 'NumNum',
@@ -84,6 +89,7 @@ class AppLocalizations {
       'total_solved': 'Total Solved',
       'multiplication_table': 'Multiplication Table',
       'multiplication_tables': 'Multiplication Tables',
+      'multiplication_tables_description': 'Select the numbers you want to practice',
       'language': 'Language',
       'theme': 'Theme',
       'select_numbers': 'Select which numbers will be used in training and duels. At least one number must be selected.',
@@ -137,6 +143,10 @@ class AppLocalizations {
       'pause_message': 'Duel paused',
       'resume': 'Resume',
       'exit_duel': 'Exit duel',
+      // Parent metrics
+      'parent_days_streak': 'Days in a row',
+      'parent_trainings_today': 'Trainings today',
+      'parent_trainings_total': 'Total trainings',
     },
     'de': {
       'app_title': 'NumNum',
@@ -151,6 +161,7 @@ class AppLocalizations {
       'total_solved': 'Gesamt gelöst',
       'multiplication_table': 'Einmaleins',
       'multiplication_tables': 'Einmaleins',
+      'multiplication_tables_description': 'Wähle die Zahlen zum Üben aus',
       'language': 'Sprache',
       'theme': 'Design',
       'select_numbers': 'Wählen Sie aus, welche Zahlen in Training und Duellen verwendet werden. Mindestens eine Zahl muss ausgewählt werden.',
@@ -204,6 +215,10 @@ class AppLocalizations {
       'pause_message': 'Duell pausiert',
       'resume': 'Fortsetzen',
       'exit_duel': 'Duell verlassen',
+      // Parent metrics
+      'parent_days_streak': 'Tage in Folge',
+      'parent_trainings_today': 'Trainings heute',
+      'parent_trainings_total': 'Trainings insgesamt',
     },
   };
 
