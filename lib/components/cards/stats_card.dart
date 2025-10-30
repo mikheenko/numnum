@@ -66,7 +66,7 @@ class StatsCard extends StatelessWidget {
             title,
             style: AppTextStyles.body2.copyWith(
               color: context.colors.onSurfaceVariant,
-              fontSize: 10,
+              fontSize: 12,
             ),
             textAlign: TextAlign.center,
             maxLines: 2,

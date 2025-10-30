@@ -42,8 +42,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      int daysStreak = prefs.getInt('days_streak') ?? 0;
+      final lastDate = prefs.getString('last_training_date');
+
+      // If a day was missed (no training yesterday or longer), reset streak to 0 for display
+      if (lastDate != null) {
+        try {
+          final now = DateTime.now();
+          final todayDate = DateTime(now.year, now.month, now.day);
+          final parsed = DateFormat('yyyy-MM-dd').parse(lastDate);
+          final lastDateOnly = DateTime(parsed.year, parsed.month, parsed.day);
+          final diff = todayDate.difference(lastDateOnly).inDays;
+          if (diff > 1 && daysStreak != 0) {
+            daysStreak = 0;
+            await prefs.setInt('days_streak', 0);
+          }
+        } catch (_) {}
+      }
+
       setState(() {
-        _daysStreak = prefs.getInt('days_streak') ?? 0;
+        _daysStreak = daysStreak;
         _trainingsToday = prefs.getInt('trainings_$today') ?? 0;
         _trainingsTotal = prefs.getInt('trainings_total') ?? 0;
       });
