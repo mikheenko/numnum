@@ -352,45 +352,12 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
       await prefs.setInt('mistakes_$today', newMistakes);
       
       // Parent-facing training metrics
-      final lastDate = prefs.getString('last_training_date');
       int trainingsToday = prefs.getInt('trainings_$today') ?? 0;
-      int daysStreak = prefs.getInt('days_streak') ?? 0;
       int trainingsTotal = prefs.getInt('trainings_total') ?? 0;
-      
-      // Normalize dates to local day start
-      final now = DateTime.now();
-      final todayDate = DateTime(now.year, now.month, now.day);
-      int dayDiff;
-      if (lastDate == null) {
-        dayDiff = 9999; // force initialization
-      } else {
-        try {
-          final last = DateFormat('yyyy-MM-dd').parse(lastDate);
-          final lastDateOnly = DateTime(last.year, last.month, last.day);
-          dayDiff = todayDate.difference(lastDateOnly).inDays;
-        } catch (_) {
-          dayDiff = 9999;
-        }
-      }
 
-      if (dayDiff == 0) {
-        // Same day: streak unchanged, just increment trainings today
-        trainingsToday = trainingsToday + 1;
-        await prefs.setInt('trainings_$today', trainingsToday);
-      } else if (dayDiff == 1) {
-        // Consecutive day: increase streak and set today's trainings to 1
-        daysStreak = daysStreak + 1;
-        await prefs.setInt('days_streak', daysStreak);
-        await prefs.setInt('trainings_$today', 1);
-      } else {
-        // Missed at least one day: start streak from 1 for today's training
-        daysStreak = 1;
-        await prefs.setInt('days_streak', daysStreak);
-        await prefs.setInt('trainings_$today', 1);
-      }
-      await prefs.setString('last_training_date', today);
-      
-      // Always increase total trainings count
+      trainingsToday = trainingsToday + 1;
+      await prefs.setInt('trainings_$today', trainingsToday);
+
       trainingsTotal = trainingsTotal + 1;
       await prefs.setInt('trainings_total', trainingsTotal);
       

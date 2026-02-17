@@ -27,7 +27,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Set<int> _selectedMultipliers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
   // Parent-facing metrics
-  int _daysStreak = 0; // Consecutive training days
   int _trainingsToday = 0; // Trainings done today
   int _trainingsTotal = 0; // Total trainings
 
@@ -42,33 +41,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-      int daysStreak = prefs.getInt('days_streak') ?? 0;
       final lastDate = prefs.getString('last_training_date');
 
-      // If a day was missed (no training yesterday or longer), reset streak to 0 for display
-      if (lastDate != null) {
-        try {
-          final now = DateTime.now();
-          final todayDate = DateTime(now.year, now.month, now.day);
-          final parsed = DateFormat('yyyy-MM-dd').parse(lastDate);
-          final lastDateOnly = DateTime(parsed.year, parsed.month, parsed.day);
-          final diff = todayDate.difference(lastDateOnly).inDays;
-          if (diff > 1 && daysStreak != 0) {
-            daysStreak = 0;
-            await prefs.setInt('days_streak', 0);
-          }
-        } catch (_) {}
-      }
-
       setState(() {
-        _daysStreak = daysStreak;
         _trainingsToday = prefs.getInt('trainings_$today') ?? 0;
         _trainingsTotal = prefs.getInt('trainings_total') ?? 0;
       });
     } catch (e) {
       print('Error loading stats: $e');
       setState(() {
-        _daysStreak = 0;
         _trainingsToday = 0;
         _trainingsTotal = 0;
       });
@@ -167,18 +148,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           const SizedBox(height: AppSpacing.lg),
                           
-                          // Parent-facing stats: two on top, one full width below
+                          // Parent-facing stats
                           Row(
                             children: [
-                              Expanded(
-                                child: StatsCard(
-                                  title: AppLocalizations.get('parent_days_streak'),
-                                  value: _daysStreak.toString(),
-                                  icon: Icons.local_fire_department,
-                                  iconColor: context.colors.warning,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
                               Expanded(
                                 child: StatsCard(
                                   title: AppLocalizations.get('parent_trainings_today'),
@@ -187,17 +159,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   iconColor: context.colors.primary,
                                 ),
                               ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Expanded(
+                                child: StatsCard(
+                                  title: AppLocalizations.get('parent_trainings_total'),
+                                  value: _trainingsTotal.toString(),
+                                  icon: Icons.emoji_events,
+                                  iconColor: context.colors.secondary,
+                                ),
+                              ),
                             ],
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                          SizedBox(
-                            width: double.infinity,
-                            child: StatsCard(
-                              title: AppLocalizations.get('parent_trainings_total'),
-                              value: _trainingsTotal.toString(),
-                              icon: Icons.emoji_events,
-                              iconColor: context.colors.secondary,
-                            ),
                           ),
                           const SizedBox(height: AppSpacing.lg),
                         ],

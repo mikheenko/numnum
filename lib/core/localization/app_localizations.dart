@@ -13,7 +13,6 @@ class AppLocalizations {
       'pythagoras_table': 'Таблица Пифагора',
       'solved_today': 'Решено сегодня',
       'accuracy': 'Точность',
-      'win_streak': 'Серия побед',
       'total_solved': 'Всего решено',
       'multiplication_table': 'Таблица умножения',
       'multiplication_tables': 'Таблица умножения',
@@ -72,7 +71,6 @@ class AppLocalizations {
       'resume': 'Продолжить',
       'exit_duel': 'Выйти из дуэли',
       // Parent metrics
-      'parent_days_streak': 'Дней подряд',
       'parent_trainings_today': 'Тренировок сегодня',
       'parent_trainings_total': 'Всего тренировок',
     },
@@ -85,7 +83,6 @@ class AppLocalizations {
       'pythagoras_table': 'Pythagoras Table',
       'solved_today': 'Solved Today',
       'accuracy': 'Accuracy',
-      'win_streak': 'Win Streak',
       'total_solved': 'Total Solved',
       'multiplication_table': 'Multiplication Table',
       'multiplication_tables': 'Multiplication Tables',
@@ -144,7 +141,6 @@ class AppLocalizations {
       'resume': 'Resume',
       'exit_duel': 'Exit duel',
       // Parent metrics
-      'parent_days_streak': 'Days in a row',
       'parent_trainings_today': 'Trainings today',
       'parent_trainings_total': 'Total trainings',
     },
@@ -157,7 +153,6 @@ class AppLocalizations {
       'pythagoras_table': 'Pythagoras-Tabelle',
       'solved_today': 'Heute gelöst',
       'accuracy': 'Genauigkeit',
-      'win_streak': 'Siegesserie',
       'total_solved': 'Gesamt gelöst',
       'multiplication_table': 'Einmaleins',
       'multiplication_tables': 'Einmaleins',
@@ -216,7 +211,6 @@ class AppLocalizations {
       'resume': 'Fortsetzen',
       'exit_duel': 'Duell verlassen',
       // Parent metrics
-      'parent_days_streak': 'Tage in Folge',
       'parent_trainings_today': 'Trainings heute',
       'parent_trainings_total': 'Trainings insgesamt',
     },
