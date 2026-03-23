@@ -896,8 +896,8 @@ class _DuelScreenState extends State<DuelScreen> with TickerProviderStateMixin {
                   IconButton(
                     onPressed: _gameStarted && !_gameEnded ? _showPauseDialog : null,
                     icon: Icon(
-                      Icons.pause, 
-                      size: 18,
+                      Icons.close_rounded,
+                      size: 22,
                       color: _gameStarted && !_gameEnded 
                           ? context.colors.iconColor 
                           : context.colors.iconColor.withValues(alpha: 0.5),

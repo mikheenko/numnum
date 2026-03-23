@@ -127,12 +127,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildMultiplicationSection() {
+    final allSelected = _selectedMultipliers.length == 10;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.get('multiplication_tables'),
-          style: AppTextStyles.h3.copyWith(color: context.colors.onSurface),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                AppLocalizations.get('multiplication_tables'),
+                style: AppTextStyles.h3.copyWith(color: context.colors.onSurface),
+              ),
+            ),
+            if (!allSelected)
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedMultipliers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+                  });
+                  _saveMultiplierSettings();
+                },
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  AppLocalizations.get('select_all'),
+                  style: AppTextStyles.body2.copyWith(
+                    color: context.colors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
@@ -185,14 +213,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ] : null,
                   ),
-                  child: Center(
-                    child: Text(
-                      multiplier.toString(),
-                      style: AppTextStyles.h3.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? context.colors.onPrimary : context.colors.onSurface,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Text(
+                          multiplier.toString(),
+                          style: AppTextStyles.h3.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isSelected ? context.colors.onPrimary : context.colors.onSurface,
+                          ),
+                        ),
                       ),
-                    ),
+                      if (isSelected)
+                        Positioned(
+                          top: 3,
+                          right: 4,
+                          child: Icon(
+                            Icons.check,
+                            size: 13,
+                            color: context.colors.onPrimary.withValues(alpha: 0.85),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               );

@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,12 +22,22 @@ class LanguageManager extends ChangeNotifier {
   Future<void> initialize() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final savedLanguage = prefs.getString('selectedLanguage') ?? 'ru';
-      _currentLanguage = savedLanguage;
+      final savedLanguage = prefs.getString('selectedLanguage');
+      if (savedLanguage != null) {
+        _currentLanguage = savedLanguage;
+      } else {
+        // First launch: use system language if supported, otherwise English
+        final systemLang = PlatformDispatcher.instance.locale.languageCode;
+        if (systemLang == 'ru' || systemLang == 'de') {
+          _currentLanguage = systemLang;
+        } else {
+          _currentLanguage = 'en';
+        }
+      }
       notifyListeners();
     } catch (e) {
       print('Error loading language: $e');
-      _currentLanguage = 'ru';
+      _currentLanguage = 'en';
     }
   }
 
