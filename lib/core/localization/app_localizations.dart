@@ -73,6 +73,16 @@ class AppLocalizations {
       // Parent metrics
       'parent_trainings_today': 'Тренировок сегодня',
       'parent_trainings_total': 'Всего тренировок',
+      // Result screen
+      'result_title': 'Результат',
+      'result_no_mistakes': 'Без ошибок',
+      'result_of': 'из',
+      'result_hints_used': 'Подсказок использовано',
+      'result_mistakes': 'Ошибки:',
+      'result_your_answers': 'Ваши ответы',
+      'result_correct_answer': 'Правильный ответ',
+      'result_hint_used': 'Использована подсказка',
+      'finish_training': 'Завершить тренировку',
     },
     'en': {
       'app_title': 'NumNum',
@@ -143,6 +153,16 @@ class AppLocalizations {
       // Parent metrics
       'parent_trainings_today': 'Trainings today',
       'parent_trainings_total': 'Total trainings',
+      // Result screen
+      'result_title': 'Result',
+      'result_no_mistakes': 'No mistakes',
+      'result_of': 'of',
+      'result_hints_used': 'Hints used',
+      'result_mistakes': 'Mistakes:',
+      'result_your_answers': 'Your answers',
+      'result_correct_answer': 'Correct answer',
+      'result_hint_used': 'Hint used',
+      'finish_training': 'Finish Training',
     },
     'de': {
       'app_title': 'NumNum',
@@ -213,6 +233,16 @@ class AppLocalizations {
       // Parent metrics
       'parent_trainings_today': 'Trainings heute',
       'parent_trainings_total': 'Trainings insgesamt',
+      // Result screen
+      'result_title': 'Ergebnis',
+      'result_no_mistakes': 'Ohne Fehler',
+      'result_of': 'von',
+      'result_hints_used': 'Hinweise verwendet',
+      'result_mistakes': 'Fehler:',
+      'result_your_answers': 'Ihre Antworten',
+      'result_correct_answer': 'Richtige Antwort',
+      'result_hint_used': 'Hinweis verwendet',
+      'finish_training': 'Training beenden',
     },
   };
 

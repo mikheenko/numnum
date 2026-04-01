@@ -5,6 +5,7 @@ import '../models/question_result.dart';
 import '../components/buttons/primary_button.dart';
 
 import '../core/theme/theme_extensions.dart';
+import '../core/localization/app_localizations.dart';
 import 'welcome_screen.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class ResultScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Результат'),
+        title: Text(AppLocalizations.get('result_title', context)),
         automaticallyImplyLeading: false,
         backgroundColor: context.colors.background,
         elevation: 0,
@@ -42,7 +43,7 @@ class ResultScreen extends StatelessWidget {
           children: [
             const SizedBox(height: AppSpacing.xl),
             Text(
-              'Без ошибок: $correctFirstTry из $total',
+              '${AppLocalizations.get('result_no_mistakes', context)}: $correctFirstTry ${AppLocalizations.get('result_of', context)} $total',
               style: AppTextStyles.h2.copyWith(
                 color: context.colors.onBackground,
               ),
@@ -70,7 +71,7 @@ class ResultScreen extends StatelessWidget {
                   ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      'Подсказок использовано: $hintsUsed',
+                      '${AppLocalizations.get('result_hints_used', context)}: $hintsUsed',
                       style: AppTextStyles.body1.copyWith(
                         color: context.colors.onSurface,
                         fontWeight: FontWeight.w500,
@@ -84,7 +85,7 @@ class ResultScreen extends StatelessWidget {
             
             if (mistakes.isNotEmpty) ...[
               Text(
-                'Ошибки:',
+                AppLocalizations.get('result_mistakes', context),
                 style: AppTextStyles.h3.copyWith(color: context.colors.error),
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -106,13 +107,13 @@ class ResultScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
-                        'Ваши ответы: ${r.userAnswers.join(", ")}',
+                        '${AppLocalizations.get('result_your_answers', context)}: ${r.userAnswers.join(", ")}',
                         style: AppTextStyles.body2.copyWith(
                           color: context.colors.onSurfaceVariant,
                         ),
                       ),
                       Text(
-                        'Правильный ответ: ${r.correctAnswer}',
+                        '${AppLocalizations.get('result_correct_answer', context)}: ${r.correctAnswer}',
                         style: AppTextStyles.body2.copyWith(
                           color: context.colors.success,
                         ),
@@ -127,7 +128,7 @@ class ResultScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: AppSpacing.xs),
                             Text(
-                              'Использована подсказка',
+                              AppLocalizations.get('result_hint_used', context),
                               style: AppTextStyles.body2.copyWith(
                                 color: context.colors.warning,
                                 fontStyle: FontStyle.italic,
@@ -143,7 +144,7 @@ class ResultScreen extends StatelessWidget {
             ],
             
             PrimaryButton(
-              text: 'Завершить тренировку',
+              text: AppLocalizations.get('finish_training', context),
               onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                   builder: (context) => const WelcomeScreen(),
