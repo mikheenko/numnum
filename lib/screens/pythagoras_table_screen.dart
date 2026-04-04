@@ -118,7 +118,8 @@ class _PythagorasTableWithModesState extends State<_PythagorasTableWithModes>
 
   Future<void> _loadLanguageSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    final language = prefs.getString('selectedLanguage') ?? 'ru';
+    final language = prefs.getString('selectedLanguage') ??
+        LanguageManager.getDefaultLanguageCode();
     AppLocalizations.setLanguage(language);
   }
 

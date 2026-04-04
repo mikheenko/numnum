@@ -26,13 +26,7 @@ class LanguageManager extends ChangeNotifier {
       if (savedLanguage != null) {
         _currentLanguage = savedLanguage;
       } else {
-        // First launch: use system language if supported, otherwise English
-        final systemLang = PlatformDispatcher.instance.locale.languageCode;
-        if (systemLang == 'ru' || systemLang == 'de') {
-          _currentLanguage = systemLang;
-        } else {
-          _currentLanguage = 'en';
-        }
+        _currentLanguage = getDefaultLanguageCode();
       }
       notifyListeners();
     } catch (e) {
@@ -70,4 +64,12 @@ class LanguageManager extends ChangeNotifier {
   static void reset() {
     _instance = null;
   }
-} 
+
+  static String getDefaultLanguageCode() {
+    final systemLang = PlatformDispatcher.instance.locale.languageCode;
+    if (systemLang == 'ru' || systemLang == 'de') {
+      return systemLang;
+    }
+    return 'en';
+  }
+}

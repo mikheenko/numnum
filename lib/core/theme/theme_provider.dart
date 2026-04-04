@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +30,7 @@ class ThemeProvider extends ChangeNotifier {
     try {
       // 1. Загружаем сохраненную тему
       final prefs = await SharedPreferences.getInstance();
-      final savedTheme = prefs.getString(_themeKey) ?? 'light';
+      final savedTheme = prefs.getString(_themeKey) ?? 'system';
       
       // 2. Устанавливаем режим темы
       switch (savedTheme) {
@@ -42,7 +44,7 @@ class ThemeProvider extends ChangeNotifier {
           _themeMode = ThemeMode.system;
           break;
         default:
-          _themeMode = ThemeMode.light; // По умолчанию светлая тема
+          _themeMode = ThemeMode.system;
           break;
       }
 
@@ -53,9 +55,8 @@ class ThemeProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error initializing ThemeProvider: $e');
-      // Fallback to light theme
-      _themeMode = ThemeMode.light;
-      _colors = AppColorsLight();
+      _themeMode = ThemeMode.system;
+      _updateColors();
       _isInitialized = true;
       notifyListeners();
     }
@@ -111,8 +112,8 @@ class ThemeProvider extends ChangeNotifier {
         _colors = AppColorsDark();
         break;
       case ThemeMode.system:
-        // Используем переданную яркость или светлую по умолчанию
-        final brightness = systemBrightness ?? Brightness.light;
+        final brightness =
+            systemBrightness ?? PlatformDispatcher.instance.platformBrightness;
         _colors = brightness == Brightness.dark 
             ? AppColorsDark() 
             : AppColorsLight();
@@ -163,14 +164,14 @@ class ThemeProvider extends ChangeNotifier {
     iconTheme: const IconThemeData(color: Color(0xFFE0E0E0)),
   );
 
-  /// Сброс темы к дефолтным настройкам (светлая тема)
+  /// Сброс темы к системной настройке
   Future<void> resetToDefault() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_themeKey); // Удаляем сохраненную тему
       
-      _themeMode = ThemeMode.light;
-      _colors = AppColorsLight();
+      _themeMode = ThemeMode.system;
+      _updateColors();
       
       notifyListeners();
     } catch (e) {
