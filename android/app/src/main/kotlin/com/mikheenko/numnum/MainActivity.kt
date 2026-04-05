@@ -1,4 +1,4 @@
-package com.example.numnum
+package com.mikheenko.numnum
 
 import io.flutter.embedding.android.FlutterActivity
 

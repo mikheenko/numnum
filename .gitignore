@@ -90,6 +90,8 @@ coverage/
 *.backup
 *.bak
 *.orig
+*.jks
+*.keystore
 
 # IDE specific
 .vscode/settings.json
